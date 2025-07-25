@@ -2,39 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
+/* Agricultural Supply Chain Design System
+All colors MUST be HSL - Earthy, natural palette for agricultural theme
 */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Agricultural color palette */
+    --background: 50 20% 98%;
+    --foreground: 140 30% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 140 30% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 140 30% 8%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 140 60% 35%;        /* Rich agricultural green */
+    --primary-foreground: 0 0% 98%;
+    --primary-light: 140 50% 45%;  /* Lighter green for accents */
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 35 45% 85%;       /* Warm cream */
+    --secondary-foreground: 140 30% 8%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --accent: 25 90% 60%;          /* Harvest orange */
+    --accent-foreground: 0 0% 98%;
+    --accent-light: 25 70% 70%;    /* Lighter orange */
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --muted: 50 15% 92%;
+    --muted-foreground: 140 10% 45%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --success: 140 60% 40%;        /* Success green */
+    --success-foreground: 0 0% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --warning: 40 95% 55%;         /* Golden yellow */
+    --warning-foreground: 140 30% 8%;
+
+    --destructive: 0 75% 55%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 140 15% 88%;
+    --input: 140 15% 95%;
+    --ring: 140 60% 35%;
+
+    /* Gradients for beautiful effects */
+    --gradient-primary: linear-gradient(135deg, hsl(140 60% 35%), hsl(140 50% 45%));
+    --gradient-accent: linear-gradient(135deg, hsl(25 90% 60%), hsl(25 70% 70%));
+    --gradient-hero: linear-gradient(135deg, hsl(140 60% 35%) 0%, hsl(25 90% 60%) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%) 0%, hsl(50 20% 98%) 100%);
+    
+    /* Shadows with agricultural theme */
+    --shadow-soft: 0 4px 12px hsl(140 20% 70% / 0.15);
+    --shadow-medium: 0 8px 25px hsl(140 30% 50% / 0.25);
+    --shadow-strong: 0 15px 35px hsl(140 40% 30% / 0.35);
+    
+    /* Transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s ease-out;
 
     --radius: 0.5rem;
 
