@@ -7,6 +7,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { Leaf, Store, ShoppingCart, Mail, Phone, Lock } from "lucide-react"
+import { supabase } from "@/integrations/supabase/client"
+import { toast } from "sonner"
 
 interface AuthModalProps {
   isOpen: boolean
@@ -17,6 +19,7 @@ interface AuthModalProps {
 export const AuthModal = ({ isOpen, onClose, onAuth }: AuthModalProps) => {
   const [role, setRole] = useState<'vendor' | 'buyer'>('vendor')
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login')
+  const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
     phone: '',
@@ -26,11 +29,54 @@ export const AuthModal = ({ isOpen, onClose, onAuth }: AuthModalProps) => {
     businessName: ''
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement Firebase authentication
-    onAuth(role)
-    onClose()
+    
+    if (!formData.email || !formData.password) {
+      toast.error("Please fill in all required fields")
+      return
+    }
+
+    if (authMode === 'signup' && formData.password !== formData.confirmPassword) {
+      toast.error("Passwords do not match")
+      return
+    }
+
+    setLoading(true)
+    try {
+      if (authMode === 'signup') {
+        const { data, error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              full_name: formData.name,
+              role: role,
+              business_name: formData.businessName,
+              phone: formData.phone
+            }
+          }
+        })
+        
+        if (error) throw error
+        if (data.user) {
+          toast.success("Account created successfully!")
+        }
+      } else {
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+        
+        if (error) throw error
+        toast.success("Logged in successfully!")
+      }
+      onClose()
+    } catch (error: any) {
+      toast.error(error.message || "Authentication failed")
+    } finally {
+      setLoading(false)
+    }
   }
 
   const handleInputChange = (field: string, value: string) => {
@@ -87,8 +133,8 @@ export const AuthModal = ({ isOpen, onClose, onAuth }: AuthModalProps) => {
                 </div>
               </div>
 
-              <Button type="submit" variant="hero" className="w-full">
-                Login
+              <Button type="submit" variant="hero" className="w-full" disabled={loading}>
+                {loading ? "Logging in..." : "Login"}
               </Button>
             </form>
           </TabsContent>
@@ -226,8 +272,8 @@ export const AuthModal = ({ isOpen, onClose, onAuth }: AuthModalProps) => {
                 </div>
               </div>
 
-              <Button type="submit" variant="hero" className="w-full">
-                Create Account as {role === 'vendor' ? 'Vendor' : 'Buyer'}
+              <Button type="submit" variant="hero" className="w-full" disabled={loading}>
+                {loading ? "Creating Account..." : `Create Account as ${role === 'vendor' ? 'Vendor' : 'Buyer'}`}
               </Button>
             </form>
           </TabsContent>
